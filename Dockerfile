@@ -2,7 +2,6 @@ FROM python:3.8-bullseye
 
 # Make sure the package repository is up to date.
 RUN apt-get update && \
-    apt-get -qy full-upgrade && \
     apt-get install -qy git && \
 # Install a basic SSH server
     apt-get install -qy openssh-server && \
