@@ -13,10 +13,10 @@ RUN apt-get update && \
 # Add user jenkins to the image
     adduser --quiet jenkins && \
 # Set password for the jenkins user (you may want to alter this).
-    echo "jenkins:jenkins" | chpasswd
-
+    echo "jenkins:jenkins" | chpasswd && \
 # Install python package
-RUN pip install --upgrade pip && pip install ptest easyium DateTime requests zeep pymssql opencv-python numpy pandas
+    pip install --upgrade pip && pip install ptest easyium DateTime requests zeep pymssql opencv-python numpy pandas && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 # Install Chrome
 ARG CHROME_VERSION="google-chrome-stable"
