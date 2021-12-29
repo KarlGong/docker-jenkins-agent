@@ -18,6 +18,18 @@ RUN apt-get update && \
 # Install python package
 RUN pip install --upgrade pip && pip install ptest easyium DateTime requests zeep pymssql opencv-python numpy pandas
 
+# Install fonts
+RUN wget https://github.com/google/fonts/archive/main.tar.gz -O gf.tar.gz && \
+  tar -xf gf.tar.gz && \
+  mkdir -p /usr/share/fonts/truetype/google-fonts && \
+  find $PWD/fonts-main/ -name "*.ttf" -exec install -m644 {} /usr/share/fonts/truetype/google-fonts/ \; || return 1 && \
+  rm -f gf.tar.gz && \
+  # Remove the extracted fonts directory
+  rm -rf $PWD/fonts-main && \
+  # Remove the following line if you're installing more applications after this RUN command and you have errors while installing them
+  rm -rf /var/cache/* && \
+  fc-cache -f
+
 # Install Chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
   && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
