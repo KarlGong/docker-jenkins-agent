@@ -17,7 +17,7 @@ RUN apt-get update && \
     pip install --upgrade pip && \
     pip install ptest easyium DateTime requests zeep pymssql opencv-python numpy pandas && \
 # Clean up
-    rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/*
     
 
 # Install Chrome
