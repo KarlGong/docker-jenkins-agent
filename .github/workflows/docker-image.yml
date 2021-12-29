@@ -16,7 +16,7 @@ jobs:
       with:
         image: billzh/evc/jenkins-agent
         tags: latest
-        registry: hub.docker.com
+        registry: registry.hub.docker.com
         dockerfile: Dockerfile
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
