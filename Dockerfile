@@ -2,28 +2,30 @@ FROM python:3.8-bullseye
 
 # Make sure the package repository is up to date.
 RUN apt-get update && \
-    apt-get install -qy git && \
+    apt-get install -qy --no-install-recommends git && \
 # Install a basic SSH server
-    apt-get install -qy openssh-server && \
+    apt-get install -qy --no-install-recommends openssh-server && \
     sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd && \
     mkdir -p /var/run/sshd && \
-# Install JDK 11
-    apt-get install -qy openjdk-11-jdk && \
+# Install JRE 11
+    apt-get install -qy --no-install-recommends openjdk-11-jre && \
 # Add user jenkins to the image
     adduser --quiet jenkins && \
 # Set password for the jenkins user (you may want to alter this).
     echo "jenkins:jenkins" | chpasswd && \
 # Install python package
-    pip install --upgrade pip && pip install ptest easyium DateTime requests zeep pymssql opencv-python numpy pandas && \
-    rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+    pip install --upgrade pip && \
+    pip install ptest easyium DateTime requests zeep pymssql opencv-python numpy pandas && \
+# Clean up
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \
+    
 
 # Install Chrome
 ARG CHROME_VERSION="google-chrome-stable"
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
   && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
   && apt-get update -qqy \
-  && apt-get -qqy install \
-    ${CHROME_VERSION:-google-chrome-stable} \
+  && apt-get install -qqy --no-install-recommends ${CHROME_VERSION:-google-chrome-stable} \
   && rm /etc/apt/sources.list.d/google-chrome.list \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
@@ -74,7 +76,7 @@ ARG EDGE_VERSION="microsoft-edge-stable"
 RUN wget -q -O - https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
   && echo "deb https://packages.microsoft.com/repos/edge stable main" >> /etc/apt/sources.list.d/microsoft-edge.list \
   && apt-get update -qqy \
-  && apt-get -qqy install ${EDGE_VERSION} \
+  && apt-get install -qqy --no-install-recommends ${EDGE_VERSION} \
   && rm /etc/apt/sources.list.d/microsoft-edge.list \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
